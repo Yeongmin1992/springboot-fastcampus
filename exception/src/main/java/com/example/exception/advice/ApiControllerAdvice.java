@@ -114,6 +114,7 @@ public class ApiControllerAdvice {
         errorResponse.setStatusCode(HttpStatus.BAD_REQUEST.toString());
         errorResponse.setResultCode("FAIL");
 
+        //여기에 디버깅 걸어서 원하는 에러 메세지 등 확인
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 

@@ -21,6 +21,7 @@ public class GlobalControllerAdvice {
 
     }
 
+    // 특정 에러 처리하기
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity methodArgumentNotValidException(MethodArgumentNotValidException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 // java servlet의 필터를 상속
-//@Component @WebFilter 사용 안할 시에는 component 어노테이션 사용하여 빈으로 등록해줘야 함.
+//@Component(전역으로 사용) @WebFilter(적용 범위 지정) 사용 안할 시에는 component 어노테이션 사용하여 빈으로 등록해줘야 함.
 @Slf4j
 @WebFilter(urlPatterns = "/api/user/*")
 public class GlobalFilter implements Filter {
@@ -29,7 +29,7 @@ public class GlobalFilter implements Filter {
         ContentCachingRequestWrapper httpServletRequest = new ContentCachingRequestWrapper((HttpServletRequest)request);
         ContentCachingResponseWrapper httpServletResponse = new ContentCachingResponseWrapper((HttpServletResponse)response);
 
-        /* ContentCachingRequestWrapper 클래스를 들여다보면 생성자의 길이만 지정을 해 놓았고, 내용은 추후에 사용 함. doFilter 이후에 request에 대한 정보를 읽어줘야 한다.
+        /* ContentCachingRequestWrapper 클래스를 들여다보면 생성자에서 컨텐츠의 길이만 지정을 해 놓았고, 내용은 추후에 사용 함. doFilter 이후에 request에 대한 정보를 읽어줘야 한다.
         BufferedReader br = httpServletRequest.getReader();
         br.lines().forEach(line -> {
             log.info("url : {}, line : {}", url, line);
@@ -49,7 +49,7 @@ public class GlobalFilter implements Filter {
         String resContent = new String(httpServletResponse.getContentAsByteArray());
         int httpStatus = httpServletResponse.getStatus();
 
-        // 위의 resContent에서 바디를 끝 까지 한번 읽었기 때문에 커서가 제일 마지막으로 가서 더 이상 읽을게 없는 상태임으로, 읽었던 내용을 한번 더 복사 해줌
+        // 위의 resContent에서 바디를 끝 까지 한번 읽었기 때문에 커서가 제일 마지막으로 가서 더 이상 읽을게 없는 상태여서 response에 'No Body'가 발생. 따라서, 읽었던 내용을 한번 더 복사 해줌
         httpServletResponse.copyBodyToResponse();
 
         log.info("response status : {}, responseBody : {}", httpStatus, resContent);
