@@ -46,7 +46,9 @@ public class Main {
         String json = objectMapper.writeValueAsString(user);
         System.out.println(json);
 
-        JsonNode jsonNode = objectMapper.readTree(json);
+
+        // 하나씩 파싱하기기
+       JsonNode jsonNode = objectMapper.readTree(json);
         String _name = jsonNode.get("name").asText();
         int _age = jsonNode.get("age").asInt();
         System.out.println("name : " + _name);
