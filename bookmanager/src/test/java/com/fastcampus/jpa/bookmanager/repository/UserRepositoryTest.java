@@ -5,13 +5,15 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.contains;
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.endsWith;
 
 @SpringBootTest
 class UserRepositoryTest {
@@ -20,6 +22,76 @@ class UserRepositoryTest {
 
     @Test
     void crud() {
+       User user = new User();
+       user.setEmail("daum");
+
+       ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("email", contains());
+       Example<User> example = Example.of(user, matcher);
+
+        userRepository.findAll(example).forEach(System.out::println);
+        /*
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnorePaths("name")
+                .withMatcher("email", endsWith());
+
+        // Example.of에 인자로 들어가는 probe는 실제로 Entity는 아님을 나타냄(가찌 Entity로 볼 수 있다.)
+        org.springframework.data.domain.Example<User> example = Example.of(new User("ma", "gmail.com"), matcher);
+        userRepository.findAll(example).forEach(System.out::println);
+
+        org.springframework.data.domain.Example<User> example = Example.of(new User("hello", "hello@gmail.com"));
+
+        userRepository.findAll(example).forEach(System.out::println);
+
+
+        // page는 0부터 시작
+        Page<User> users = userRepository.findAll(PageRequest.of(1, 3));
+
+        System.out.println("page : " + users);
+        System.out.println("totalElements : " + users.getTotalElements());
+        System.out.println("totalPages : " + users.getTotalPages());
+        System.out.println("numberOfElements : " + users.getNumberOfElements());
+        System.out.println("sort : " + users.getSort());
+        // 페이징 할때 나누는 크기
+        System.out.println("size : " + users.getSize());
+
+        users.getContent().forEach(System.out::println);
+
+
+        userRepository.deleteAllInBatch();
+        // or 조건으로 delete문 한번 실행 -> SimpleJpaRepository를 보면 쿼리문을 만들어서 한번 실행하는 것을 볼 수 있음
+      //  userRepository.deleteAllInBatch(userRepository.findAllById(Lists.newArrayList(1L, 3L)));
+
+        // delete는 데이터 갯수만큼 delete문 실행 -> SimpleJpaRepository를 보면 for문을 돌려서 조회 및 삭제를 진행하는 것을 볼 수 있음
+       // userRepository.deleteAll(userRepository.findAllById(Lists.newArrayList(1L, 3L)));
+
+        // userRepository.deleteAll();
+        // select문이 2번 돔
+//        userRepository.delete(userRepository.findById(1L).orElseThrow(RuntimeException::new));
+
+        // select문이 1번 돔
+       // userRepository.deleteById(1L);
+
+        userRepository.findAll().forEach(System.out::println);
+
+
+        // 해당 id값이 있는지 없는지
+        boolean exists = userRepository.existsById(1L);
+        System.out.println(exists);
+
+        // count는 long형식으로 리턴
+//        long count = userRepository.count();
+
+//        System.out.println(count);
+
+
+
+//        userRepository.save(new User("new car", "newcar@gmail.com"));
+          // flush는 db에 반영하는 시점을 조절하는 기능. 이후 영속성 다룰 때 자세히 다룰 예정
+//        userRepository.flush();
+        //위에 두줄 묶은 기능
+        userRepository.saveAndFlush(new User("new car", "newcar@gmail.com"));
+
+        userRepository.findAll().forEach(System.out::println);
 
         // getOne은 session 오류로 인하여 @Transactional 어노테이션이 필요함, 현재는 사용 안하는 듯
         // getOne은 기본적으로 Entity 에 대하여 lazy한 로딩을 지원. lazy patch는 추후에 다룰 예정
@@ -31,7 +103,7 @@ class UserRepositoryTest {
 
         System.out.println(user);
 
-/*
+
         User user1 = new User("jack", "jack@gmail.com");
         User user2 = new User("steve", "steve@gmail.com");
 
@@ -41,9 +113,9 @@ class UserRepositoryTest {
         List<User> users = userRepository.findAll();
 
         users.forEach(System.out::println);
-        */
 
-/*
+
+
         // 이름으로 내림차순 정렬
         List<User> users = userRepository.findAll(Sort.by(Sort.Direction.DESC, "name"));
 
@@ -54,8 +126,6 @@ class UserRepositoryTest {
         아래 코드는 이와 동일(테스트에서만 제공하는 코드)
         List<User> users = userRepository.findAllById(ids);
         L은 숫자가 long 타입이라는 것을 지정해 줌
-         *//*
-
 
         // 1,3,5번만 뽑기
         List<User> users = userRepository.findAllById(Lists.newArrayList(1L, 3L, 5L));
@@ -68,8 +138,36 @@ class UserRepositoryTest {
 
         // User테이블의 모든 데이터를 리스트형식으로 가져오기(stream, lamda식 더 살펴 볼 것)
         userRepository.findAll().forEach(System.out::println);
+
+        // SimpleJpaRepository.class를 살펴보면 save함수가 상황에 따라 insert 혹은 update를 수행한다는 것을 알 수 있다.
+        // ㄴ isNew 함수를 통해 해당 id가 null 이라면 insert, 존재하는 id라면 update를 실행
+
+        userRepository.save(new User("david", "david@gmail.com"));
+
+        User user = userRepository.findById(1L).orElseThrow(RuntimeException::new);
+        user.setEmail("hello-update@gmail.com");
+
+        userRepository.save(user);
 */
 
 
+    }
+
+    @Test
+    void select() {
+        System.out.println(userRepository.findByName("dennis"));
+
+        System.out.println("findByEmail : " + userRepository.findByEmail("hello@gmail.com"));
+        System.out.println("getByEmail : " + userRepository.getByEmail("hello@gmail.com"));
+        System.out.println("readByEmail : " + userRepository.readByEmail("hello@gmail.com"));
+        System.out.println("queryByEmail : " + userRepository.queryByEmail("hello@gmail.com"));
+        System.out.println("searchByEmail : " + userRepository.searchByEmail("hello@gmail.com"));
+        System.out.println("streamByEmail : " + userRepository.streamByEmail("hello@gmail.com"));
+        System.out.println("findUserByEmail : " + userRepository.findUserByEmail("hello@gmail.com"));
+        System.out.println("findSomethingByEmail : " + userRepository.findSomethingByEmail("hello@gmail.com"));
+
+        System.out.println("findTop2ByEmail : " + userRepository.findTop2ByName("hello"));
+        System.out.println("findFirst2ByEmail : " + userRepository.findFirst2ByName("hello"));
+        System.out.println("findLast1ByName : " + userRepository.findLast1ByName("hello"));
     }
 }
