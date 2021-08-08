@@ -2,18 +2,19 @@ package com.fastcampus.jpa.bookmanager.repository;
 
 import com.fastcampus.jpa.bookmanager.domain.User;
 import org.assertj.core.util.Lists;
+import org.hibernate.criterion.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.*;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.contains;
-import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.endsWith;
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.*;
 
 @SpringBootTest
 class UserRepositoryTest {
@@ -155,19 +156,68 @@ class UserRepositoryTest {
 
     @Test
     void select() {
-        System.out.println(userRepository.findByName("dennis"));
 
-        System.out.println("findByEmail : " + userRepository.findByEmail("hello@gmail.com"));
-        System.out.println("getByEmail : " + userRepository.getByEmail("hello@gmail.com"));
-        System.out.println("readByEmail : " + userRepository.readByEmail("hello@gmail.com"));
-        System.out.println("queryByEmail : " + userRepository.queryByEmail("hello@gmail.com"));
-        System.out.println("searchByEmail : " + userRepository.searchByEmail("hello@gmail.com"));
-        System.out.println("streamByEmail : " + userRepository.streamByEmail("hello@gmail.com"));
-        System.out.println("findUserByEmail : " + userRepository.findUserByEmail("hello@gmail.com"));
-        System.out.println("findSomethingByEmail : " + userRepository.findSomethingByEmail("hello@gmail.com"));
+//        System.out.println(userRepository.findByName("dennis"));
+//
+//        System.out.println("findByEmail : " + userRepository.findByEmail("hello@gmail.com"));
+//        System.out.println("getByEmail : " + userRepository.getByEmail("hello@gmail.com"));
+//        System.out.println("readByEmail : " + userRepository.readByEmail("hello@gmail.com"));
+//        System.out.println("queryByEmail : " + userRepository.queryByEmail("hello@gmail.com"));
+//        System.out.println("searchByEmail : " + userRepository.searchByEmail("hello@gmail.com"));
+//        System.out.println("streamByEmail : " + userRepository.streamByEmail("hello@gmail.com"));
+//        System.out.println("findUserByEmail : " + userRepository.findUserByEmail("hello@gmail.com"));
+//        System.out.println("findSomethingByEmail : " + userRepository.findSomethingByEmail("hello@gmail.com"));
+//
+//        System.out.println("findTop2ByEmail : " + userRepository.findTop2ByName("hello"));
+//        System.out.println("findFirst2ByEmail : " + userRepository.findFirst2ByName("hello"));
+//        System.out.println("findLast1ByName : " + userRepository.findLast1ByName("hello"));
 
-        System.out.println("findTop2ByEmail : " + userRepository.findTop2ByName("hello"));
-        System.out.println("findFirst2ByEmail : " + userRepository.findFirst2ByName("hello"));
-        System.out.println("findLast1ByName : " + userRepository.findLast1ByName("hello"));
+        System.out.println("findByEmailAndName : " + userRepository.findByEmailAndName("hello@gmail.com", "hello") );
+        System.out.println("findByEmailOrName : " + userRepository.findByEmailOrName("hello@gmail.com", "dennis") );
+
+        System.out.println("findByCreatedAtAfter : " + userRepository.findByCreatedAtAfter(LocalDateTime.now().minusDays(1L)));
+        System.out.println("findByIdAfter : " + userRepository.findByIdAfter(4L));
+        System.out.println("findByCreatedAtGreaterThan : " + userRepository.findByCreatedAtGreaterThan(LocalDateTime.now().minusDays(1)));
+        System.out.println("findByCreatedAtGreaterThanEqual : " + userRepository.findByCreatedAtGreaterThanEqual(LocalDateTime.now().minusDays(1)));
+
+        System.out.println("findByCreatedAtBetween : " + userRepository.findByCreatedAtBetween(LocalDateTime.now().minusDays(1L), LocalDateTime.now().plusDays(1L)));
+        System.out.println("findByIdBetween : " + userRepository.findByIdBetween(1L, 3L));
+        System.out.println("findByIdGreaterThanEqualAndIdLessThanEqual : " + userRepository.findByIdGreaterThanEqualAndIdLessThanEqual(1L, 3L));
+
+        System.out.println("findByIdIsNotNull : " + userRepository.findByIdIsNotNull());
+    //    System.out.println("findByAddressIsNotEmpty : " + userRepository.findByAddressIsNotEmpty());
+
+        // lists로 list 생성하는 부분 참고! -> 실무에선 해당 부분에 다른 쿼리의 결과값이 들어가는 경우가 많음
+        System.out.println("findByNameIn : " + userRepository.findByNameIn(Lists.newArrayList("hello", "dennis")));
+
+        System.out.println("findByNameStartingWith : " + userRepository.findByNameStartingWith("hel"));
+        System.out.println("findByNameEndingWith : " + userRepository.findByNameEndingWith("lo"));
+        System.out.println("findByNameContains : " + userRepository.findByNameContains("ll"));
+
+        // 위 세줄과 동일한 기능
+        System.out.println("findByNameLike : " + userRepository.findByNameLike("hel%"));
+        System.out.println("findByNameLike : " + userRepository.findByNameLike("%lo"));
+        System.out.println("findByNameLike : " + userRepository.findByNameLike("%ll%"));
+    }
+
+    @Test
+    void pagingAndSortingTest() {
+        System.out.println("findTop1ByNameOrderByIdDesc : " + userRepository.findTop1ByNameOrderByIdDesc("hello"));
+        System.out.println("findFirstByNameOrderByIdDescEmailAsc : " + userRepository.findFirstByNameOrderByIdDescEmailAsc("hello"));
+        System.out.println("findFirstByNameWithSortParams : " + userRepository.findFirstByName("hello", Sort.by(Sort.Order.desc("id"), Sort.Order.asc("email"))));
+        // 가독성을 위해 소팅 기준을 아래와 같이 함수로 선언해서 사용할 수 있다.
+        System.out.println("findFirstByNameWithSortParams : " + userRepository.findFirstByName("hello", getSort()));
+        System.out.println("findByNameWithPaging : " + userRepository.findByName("hello", PageRequest.of(0, 1, Sort.by(Sort.Order.desc("id")))).getContent());
+        System.out.println("findByNameWithPaging : " + userRepository.findByName("hello", PageRequest.of(0, 1, Sort.by(Sort.Order.desc("id")))).getTotalElements());
+    }
+
+    // 가독성을 위해 소팅 기준을 아래와 같이 함수로 선언해서 사용할 수 있다.
+    private Sort getSort() {
+        return Sort.by(
+                Sort.Order.desc("id"),
+                Sort.Order.asc("email"),
+                Sort.Order.desc("createdAt"),
+                Sort.Order.asc("updatedAt")
+        );
     }
 }
