@@ -1,5 +1,6 @@
 package com.fastcampus.jpa.bookmanager.repository;
 
+import com.fastcampus.jpa.bookmanager.domain.Gender;
 import com.fastcampus.jpa.bookmanager.domain.User;
 import org.assertj.core.util.Lists;
 import org.hibernate.criterion.Order;
@@ -219,5 +220,32 @@ class UserRepositoryTest {
                 Sort.Order.desc("createdAt"),
                 Sort.Order.asc("updatedAt")
         );
+    }
+
+    @Test
+    void insertAndUdateTest() {
+        User user = new User();
+        user.setName("hello");
+        user.setEmail("hello2@gmail.com");
+
+        userRepository.save(user);
+
+        User user2 = userRepository.findById(1L).orElseThrow(RuntimeException::new);
+        user2.setName("helooooooo");
+
+        userRepository.save(user2);
+    }
+
+    @Test
+    void enumTest() {
+        User user = userRepository.findById(1L).orElseThrow(RuntimeException::new);
+        user.setGender(Gender.MALE);
+
+        userRepository.save(user);
+
+        userRepository.findAll().forEach(System.out::println);
+
+        System.out.println(userRepository.findRowRecord().get("gender"));
+
     }
 }

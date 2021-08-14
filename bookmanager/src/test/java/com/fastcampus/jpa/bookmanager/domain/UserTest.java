@@ -16,7 +16,7 @@ class UserTest {
         user.setName("hello");
 
         // @AllArgsConstructor 생성자의 역할
-        User user1 = new User(null, "hello", "hello@gmail.com", LocalDateTime.now(), LocalDateTime.now());
+//        User user1 = new User(null, "hello", "hello@gmail.com", LocalDateTime.now(), LocalDateTime.now());
         // @AllArgsConstructor 생성자의 역할
         User user2 = new User("hello", "hello@gmail.com");
 
