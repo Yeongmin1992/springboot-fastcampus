@@ -15,7 +15,7 @@ public class FireExceptionHandling {
 
     public static void main(String[] args) {
 
-        FileInputStream fis = null;
+        //FileInputStream fis = null;
 /*
         try {
             fis = new FileInputStream("a.txt");
@@ -37,7 +37,7 @@ public class FireExceptionHandling {
         }
         System.out.println("end");
         */
-
+/*
         try {
             fis = new FileInputStream("a.txt");
 
@@ -55,6 +55,16 @@ public class FireExceptionHandling {
             }
             System.out.println("finally가 수행됨");
             }
-        System.out.println("끝까지 다 수행됨");
+        System.out.println("끝까지 다 수행됨");*/
+
+        // 자바 7부터 적용된 try with resources 구문으로 한층 간결해짐 -> try문 안에 아래와 같으 사용하면 rouserce를 사용하는 경우 close까지 알아서 됨 -> 자바9 부터는 다시 외부에 선언하고 변수만 넣어주면 됨
+        try(FileInputStream fis = new FileInputStream("a.txt")) {
+            System.out.println("read");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        System.out.println("end");
     }
+}

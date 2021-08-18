@@ -248,4 +248,47 @@ class UserRepositoryTest {
         System.out.println(userRepository.findRowRecord().get("gender"));
 
     }
+
+    @Test
+    void listenerTest() {
+        User user = new User();
+        user.setEmail("hello2@gmail.com");
+        user.setName("hello");
+
+        userRepository.save(user);
+
+        User user2 = userRepository.findById(1L).orElseThrow(RuntimeException::new);
+        user2.setName("helllllllo");
+
+        userRepository.save(user2);
+
+        userRepository.deleteById(4L);
+    }
+
+    @Test
+    void prePersistTest() {
+        User user = new User();
+        user.setEmail("hello2@gmail.com");
+        user.setName("hello");
+        // prePersist로 처리
+//        user.setCreatedAt(LocalDateTime.now());
+//        user.setUpdatedAt(LocalDateTime.now());
+
+        userRepository.save(user);
+
+        System.out.println(userRepository.findByEmail("hello2@gmail.com"));
+    }
+
+    @Test
+    void preUpdateTest() {
+        User user = userRepository.findById(1L).orElseThrow(RuntimeException::new);
+
+        System.out.println("as-is : " + user);
+
+        user.setName("hello22");
+        userRepository.save(user);
+
+        // user값이 그대로 호출되는 것을 방지하기 위해 findAll()로 실제 db값을 조회하고, get(0)를 한다? -> 추후 영속성 관련해서 배울 것
+        System.out.println("to-be : " + userRepository.findAll().get(0));
+    }
 }
