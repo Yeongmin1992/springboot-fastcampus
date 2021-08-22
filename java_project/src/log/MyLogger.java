@@ -40,7 +40,6 @@ public class MyLogger {
         warningFile.setFormatter(new SimpleFormatter());
         fineFile.setFormatter(new SimpleFormatter());
 
-        // 모든 단계의 오류를 다 찍겠다. -> 어느 단계의 오류 로그 부터 남길지 조정 가능
         logger.setLevel(Level.ALL);
         fineFile.setLevel(Level.FINE);
         warningFile.setLevel(Level.WARNING);
@@ -76,7 +75,6 @@ public class MyLogger {
         logger.warning(msg);
     }
 }
-
 /*
 아래의 콘솔은 jre의 plugin에 있는 logging.properties 파일 설정이 info로 되어있기 때문에 info
 단계부터 log가 찍힌다.
