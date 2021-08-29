@@ -16,13 +16,15 @@ public class FileInputStreamTest {
             System.out.println((char)fis.read());
         } catch (IOException e) {
             e.printStackTrace();
-
         } finally {
             try {
                 fis.close();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (Exception e2) {
+                System.out.println(e2);
             }
         }
+        System.out.println("end");
     }
 }
