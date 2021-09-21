@@ -2,16 +2,16 @@ package serialization;
 
 import java.io.*;
 
-class Person implements Serializable{
+class Person1 implements Externalizable{
 
     String name;
     // 직렬화 하지 않을 멤버에는 transient를 붙여줌
     // transient String job;
     String job;
 
-    public Person() {}
+    public Person1() {}
 
-    public Person (String name, String job) {
+    public Person1 (String name, String job) {
         this.name = name;
         this.job = job;
     }
@@ -20,14 +20,26 @@ class Person implements Serializable{
     public String toString() {
         return name + "," + job;
     }
+
+    @Override
+    public void writeExternal(ObjectOutput obj) throws IOException {
+        obj.writeUTF(name);
+        obj.writeUTF(job);
+    }
+
+    @Override
+    public void readExternal(ObjectInput obj) throws IOException, ClassNotFoundException {
+        name = obj.readUTF();
+        job = obj.readUTF();
+    }
 }
 
-public class SerializationTest {
+public class ExternalizationTest {
 
     public static void main(String[] args) {
 
-        Person personLee = new Person("이순신", "대표이사");
-        Person personKim = new Person("김유신", "상무이사");
+        Person1 personLee = new Person1("이순신", "대표이사");
+        Person1 personKim = new Person1("김유신", "상무이사");
 
         try(FileOutputStream fos = new FileOutputStream("serial.txt");
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -42,8 +54,8 @@ public class SerializationTest {
         try(FileInputStream fis = new FileInputStream("serial.txt");
             ObjectInputStream ois = new ObjectInputStream(fis)) {
 
-            Person pLee = (Person)ois.readObject();
-            Person pKim = (Person)ois.readObject();
+            Person1 pLee = (Person1)ois.readObject();
+            Person1 pKim = (Person1)ois.readObject();
 
             System.out.println(pLee);
             System.out.println(pKim);
