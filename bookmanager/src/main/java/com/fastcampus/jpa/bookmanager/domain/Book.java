@@ -9,9 +9,10 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor // Entity객체는 기본생성자 필수
 @Data
-public class Book {
+@EntityListeners(value = MyEntityListner.class)
+public class Book implements Auditable {
     @Id
-    @GeneratedValue
+    @GeneratedValue // 만들어진 값을 가져다 쓰겠다? -> 여기서는 h2 db여서 hibernate sequence로 만들어진 값
     private Long id;
 
     private String name;
@@ -22,6 +23,7 @@ public class Book {
 
     private LocalDateTime updatedAt;
 
+/*  Entity Listner로 처리 가능
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
@@ -32,4 +34,5 @@ public class Book {
     public void preUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+    */
 }

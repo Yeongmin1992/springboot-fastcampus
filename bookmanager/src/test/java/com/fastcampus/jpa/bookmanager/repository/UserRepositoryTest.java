@@ -22,6 +22,9 @@ class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserHistoryRepository userHistoryRepository;
+
     @Test
     void crud() {
        User user = new User();
@@ -290,5 +293,20 @@ class UserRepositoryTest {
 
         // user값이 그대로 호출되는 것을 방지하기 위해 findAll()로 실제 db값을 조회하고, get(0)를 한다? -> 추후 영속성 관련해서 배울 것
         System.out.println("to-be : " + userRepository.findAll().get(0));
+    }
+
+    @Test
+    void userHistoryTest() {
+        User user = new User();
+        user.setEmail("hello-new@gmail.com");
+        user.setName("hello-new");
+
+        userRepository.save(user);
+
+        user.setName("hello-new-new");
+
+        userRepository.save(user);
+
+        userHistoryRepository.findAll().forEach(System.out::println);
     }
 }

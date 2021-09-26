@@ -12,8 +12,9 @@ import java.util.List;
 @Data  // 눌러보면 어떤 어노테이션들을 대체하는지 나옴
 @Builder  // AllArgsConstuctor와 비슷하게 객체를 생성하고, 필드값을 주입하여 주는데, builder의 형식으로 작동함
 @Entity  // 테이블 객체로 만들기
+@EntityListeners(value = {MyEntityListner.class, UserEntityListener.class})
 //@Table(name = "user", indexes = {@Index(columnList = "name")}, uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})  // name은 설정해주지 않으면 클래스 이름으로 생성.(db와 동일하게 하는 것이 좋다.) index 와 uniquConstraints 설정은 db에 맡기고 객체에는 잘 달아주지 않는 경우가 많음
-public class User {
+public class User implements Auditable {
     @Id   // primary key
     @GeneratedValue() // 자동 증가 -> 현재는 db에 자동 증가를 위임하기 위해 괄호 안의 내용 작성해 줌
     private Long id;
@@ -46,12 +47,12 @@ public class User {
 
     // JPA 핸들러러
 
-    // insert 메서드가 실행되기 이전에 호출 -> createdAt, UpdatedAt과 같은 데이터를 반복적으로 실행되도록 할 때 사용할 수 있다!!
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
+    // insert 메서드가 실행되기 이전에 호출 -> createdAt, UpdatedAt과 같은 데이터를 반복적으로 실행되도록 할 때 사용할 수 있다!! -> Entity Listener로 처리 가능
+//    @PrePersist
+//    public void prePersist() {
+//        this.createdAt = LocalDateTime.now();
+//        this.updatedAt = LocalDateTime.now();
+//    }
 
     // insert 메서드가 실행된 이후에 호출
     @PostPersist
@@ -59,11 +60,11 @@ public class User {
         System.out.println(">>> postPersist");
     }
 
-    // merge 메서드가 실행되기 이전에 호출
-    @PreUpdate
-    public void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
+    // merge 메서드가 실행되기 이전에 호출 -> entity listener로 처리 가능
+//    @PreUpdate
+//    public void preUpdate() {
+//        this.updatedAt = LocalDateTime.now();
+//    }
 
     // merge 메서드가 실행된 이후에 호출
     @PostUpdate
@@ -88,9 +89,4 @@ public class User {
     public void postLoad() {
         System.out.println(">>> postLoad");
     }
-
-
-
-
-
 }
