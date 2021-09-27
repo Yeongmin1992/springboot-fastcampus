@@ -1,10 +1,14 @@
 package com.fastcampus.jpa.bookmanager.domain;
 
+import com.fastcampus.jpa.bookmanager.domain.listener.Auditable;
+import com.fastcampus.jpa.bookmanager.domain.listener.UserEntityListener;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,9 +16,11 @@ import java.util.List;
 @Data  // 눌러보면 어떤 어노테이션들을 대체하는지 나옴
 @Builder  // AllArgsConstuctor와 비슷하게 객체를 생성하고, 필드값을 주입하여 주는데, builder의 형식으로 작동함
 @Entity  // 테이블 객체로 만들기
-@EntityListeners(value = {MyEntityListner.class, UserEntityListener.class})
+@EntityListeners(value = {UserEntityListener.class})
+//@EntityListeners(value = {AuditingEntityListener.class, UserEntityListener.class}) // spring boot에서 제공하는 리스너 사용 -> 실행 파일에 어노테이션 붙여줘야 함
+//@EntityListeners(value = {MyEntityListner.class, UserEntityListener.class})
 //@Table(name = "user", indexes = {@Index(columnList = "name")}, uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})  // name은 설정해주지 않으면 클래스 이름으로 생성.(db와 동일하게 하는 것이 좋다.) index 와 uniquConstraints 설정은 db에 맡기고 객체에는 잘 달아주지 않는 경우가 많음
-public class User implements Auditable {
+public class User extends BaseEntity implements Auditable {
     @Id   // primary key
     @GeneratedValue() // 자동 증가 -> 현재는 db에 자동 증가를 위임하기 위해 괄호 안의 내용 작성해 줌
     private Long id;
@@ -31,11 +37,13 @@ public class User implements Auditable {
     private Gender gender;
 
 //    @Column(nullable = false) // 테이블의 각 열을 설정해주는 어노테이션
-    @Column(updatable = false)  // @Column의 다른 애들과 다르게 ddl, dml모두에 적용됨
-    private LocalDateTime createdAt;
+//    @Column(updatable = false)  // @Column의 다른 애들과 다르게 ddl, dml모두에 적용됨
+//    @CreatedDate
+//    private LocalDateTime createdAt;
 
 //    @Column(insertable = false) -> @Column의 다른 애들과 다르게 ddl, dml모두에 적용됨
-    private LocalDateTime updatedAt;
+//    @LastModifiedDate
+//    private LocalDateTime updatedAt;
 
     // User 클레스는 db의 데이터와 맵핑하는 역할도 하지만, @Transient를 활용하여 객체로써 db 이외의 값을 가질수도 있음 -> 영속성을 갖지 않고, db가 아닌 객체와 생명주기를 함께 함
     @Transient

@@ -1,33 +1,18 @@
 package com.fastcampus.jpa.bookmanager.domain;
 
-import com.fastcampus.jpa.bookmanager.domain.listener.Auditable;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
-@Entity
-@NoArgsConstructor
 @Data
+@MappedSuperclass  // 해당 클래스의 필드를 상속 받는 entity의 컬럼으로 포함시키겠다
 @EntityListeners(value = AuditingEntityListener.class)
-//@EntityListeners(value = MyEntityListner.class)
-public class UserHistory implements Auditable {
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    private Long userId;
-
-    private String name;
-
-    private String email;
+public class BaseEntity {
 
     @CreatedDate
     private LocalDateTime createdAt;
