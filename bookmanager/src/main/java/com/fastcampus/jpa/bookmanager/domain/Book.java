@@ -19,7 +19,8 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)    // BaseEntity를 상속받은 변수가 @Data가 적용이 안 되어 hash code 재정의 -> 상속 받는 코드 까지 toString을 적용하고, equal hash code를 적용 하겠다.
 // @EntityListeners(value = AuditingEntityListener.class)
 // @EntityListeners(value = MyEntityListner.class)
-public class Book extends BaseEntity implements Auditable {
+// public class Book extends BaseEntity implements Auditable {
+public class Book extends BaseEntity {
     @Id
     @GeneratedValue // 만들어진 값을 가져다 쓰겠다? -> 여기서는 h2 db여서 hibernate sequence로 만들어진 값
     private Long id;

@@ -22,7 +22,8 @@ import java.time.LocalDateTime;
 //@EntityListeners(value = {AuditingEntityListener.class, UserEntityListener.class}) // spring boot에서 제공하는 리스너 사용 -> 실행 파일에 어노테이션 붙여줘야 함
 //@EntityListeners(value = {MyEntityListner.class, UserEntityListener.class})
 //@Table(name = "user", indexes = {@Index(columnList = "name")}, uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})  // name은 설정해주지 않으면 클래스 이름으로 생성.(db와 동일하게 하는 것이 좋다.) index 와 uniquConstraints 설정은 db에 맡기고 객체에는 잘 달아주지 않는 경우가 많음
-public class User extends BaseEntity implements Auditable {
+// public class User extends BaseEntity implements Auditable {
+public class User extends BaseEntity {
     @Id   // primary key
     @GeneratedValue() // 자동 증가 -> 현재는 db에 자동 증가를 위임하기 위해 괄호 안의 내용 작성해 줌
     private Long id;
