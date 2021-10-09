@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 // public class User extends BaseEntity implements Auditable {
 public class User extends BaseEntity {
     @Id   // primary key
-    @GeneratedValue() // 자동 증가 -> 현재는 db에 자동 증가를 위임하기 위해 괄호 안의 내용 작성해 줌
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동 증가 -> 현재는 db에 자동 증가를 위임하기 위해 괄호 안의 내용 작성해 줌
     private Long id;
 
     @NonNull

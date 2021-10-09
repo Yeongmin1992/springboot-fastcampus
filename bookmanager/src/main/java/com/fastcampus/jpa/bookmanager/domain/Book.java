@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 // public class Book extends BaseEntity implements Auditable {
 public class Book extends BaseEntity {
     @Id
-    @GeneratedValue // 만들어진 값을 가져다 쓰겠다? -> 여기서는 h2 db여서 hibernate sequence로 만들어진 값
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 괄호안에 값을 안넣으면 만들어진 값을 가져다 쓰겠다? -> 여기서는 h2 db여서 hibernate sequence로 만들어진 값
     private Long id;
 
     private String name;

@@ -18,26 +18,39 @@ class BookReviewInfoRepositoryTest {
     @Test
     void crudTest() {
         BookReviewInfo bookReviewInfo = new BookReviewInfo();
-        bookReviewInfo.setBookId(1L);
+//        bookReviewInfo.setBookId(1L);
         bookReviewInfo.setAverageReviewScore(4.5f);
         bookReviewInfo.setReviewCount(2);
-
-        bookReviewInfoRepository.save(bookReviewInfo);
 
         System.out.println(">>> " + bookReviewInfoRepository.findAll());
     }
 
     @Test
     void crudTest2() {
+        givenBookReviewInfo();
+
+        Book result = bookReviewInfoRepository
+                    .findById(1L)
+                    .orElseThrow(RuntimeException::new)
+                    .getBook();
+
+        System.out.println(">>> " + result);
+    }
+
+    private Book givenBook() {
         Book book = new Book();
         book.setName("Jpa 스터디");
         book.setAuthorId(1L);
         book.setPublisherId(1L);
 
-        bookRepository.save(book);
+        // entity save는 저장된 entity를 바로 return하도록 되어있다.
+        return bookRepository.save(book);
 
+    }
+
+    private void givenBookReviewInfo() {
         BookReviewInfo bookReviewInfo = new BookReviewInfo();
-        bookReviewInfo.setBookId(1L);
+        bookReviewInfo.setBook(givenBook());
         bookReviewInfo.setAverageReviewScore(4.5f);
         bookReviewInfo.setReviewCount(2);
 
@@ -45,14 +58,6 @@ class BookReviewInfoRepositoryTest {
 
         System.out.println(">>> " + bookReviewInfoRepository.findAll());
 
-        Book result = bookRepository.findById(
-                bookReviewInfoRepository
-                    .findById(1L)
-                    .orElseThrow(RuntimeException::new)
-                    .getBookId()
-        ).orElseThrow(RuntimeException::new);
-
-        System.out.println(">>> " + result);
     }
 
 }

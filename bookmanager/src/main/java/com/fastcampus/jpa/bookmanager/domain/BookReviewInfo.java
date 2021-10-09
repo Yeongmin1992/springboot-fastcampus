@@ -5,9 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
@@ -16,10 +14,13 @@ import javax.persistence.Id;
 @EqualsAndHashCode(callSuper = true)
 public class BookReviewInfo extends BaseEntity{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long bookId;
+//    private Long bookId;
+
+    @OneToOne
+    private Book book;
 
     //아래는 primitive(float) type -> primitive type은 기본값 0, wrappered(Float) type은 null 허용 안함
     private float averageReviewScore;
