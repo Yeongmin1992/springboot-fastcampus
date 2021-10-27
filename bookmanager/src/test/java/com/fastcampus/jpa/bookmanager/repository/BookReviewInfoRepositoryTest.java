@@ -35,6 +35,14 @@ class BookReviewInfoRepositoryTest {
                     .getBook();
 
         System.out.println(">>> " + result);
+
+        BookReviewInfo result2 = bookRepository
+                .findById(1L)
+                // optional 이니까 RuntimeExcetion을 넣어 준다
+                .orElseThrow(RuntimeException::new)
+                .getBookReviewInfo();
+
+        System.out.println(">>> " + result2);
     }
 
     private Book givenBook() {

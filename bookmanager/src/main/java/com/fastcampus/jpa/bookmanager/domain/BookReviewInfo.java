@@ -19,7 +19,9 @@ public class BookReviewInfo extends BaseEntity{
 
 //    private Long bookId;
 
-    @OneToOne
+    // optional을 false로 하면 book_id가 not null이 되고, book과의 join이 left outer join에서 inner join으로 변경 됨
+    // mappedBy를 사용하면 연관키를 더 이상 해당 테이블에서 가지지 않게 됨(BookReviewInfo 테이블에서 Book id가 빠짐)
+    @OneToOne(optional = false)
     private Book book;
 
     //아래는 primitive(float) type -> primitive type은 기본값 0, wrappered(Float) type은 null 허용 안함

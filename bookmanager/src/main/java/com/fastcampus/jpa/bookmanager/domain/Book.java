@@ -33,6 +33,13 @@ public class Book extends BaseEntity {
 
     private Long publisherId;
 
+    // optional을 false로 하면 book_id가 not null이 되고, book과의 join이 left outer join에서 inner join으로 변경 됨
+    // mappedBy를 사용하면 연관키를 더 이상 해당 테이블에서 가지지 않게 됨(BookReviewInfo 테이블에서 Book id가 빠지지만 양쪽으로 관계를 걸어서 원하는 데이터를 볼 수 있음)
+    @OneToOne(mappedBy = "book")
+    // etity relation을 사용하는 경우 toString()과 같은 메서드가 순환참조가 걸리게 됨. 따라서, relation을 단방향으로 걸거나 toString()에서 제외하는 것이 필요하다.
+    @ToString.Exclude
+    private BookReviewInfo bookReviewInfo;
+
 //    @CreatedDate
 //    private LocalDateTime createdAt;
 
