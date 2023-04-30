@@ -4,10 +4,10 @@ import com.example.client.dto.Req;
 import com.example.client.dto.UserRequest;
 import com.example.client.dto.UserResponse;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -162,5 +162,30 @@ public class RestTemplateService {
         //return response.getBody().getResBody();
         return response.getBody();
 
+    }
+
+    // Request, Header 객체 없이 Object type(어떤 응답이 올지 잘 모를 경우)
+    public ResponseEntity<Object> post2() {
+        URI uri = UriComponentsBuilder
+                .fromUriString("http://localhost:9090")
+                .path("/api/server/user/{userId}/name/{userName}")
+                .encode()
+                .build()
+                .expand(100, "steve")
+                .toUri();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("x-authorization", "abcd");
+        headers.set("custom-header", "fffff");
+
+        MultiValueMap<String, String> userBody = new LinkedMultiValueMap<>();
+        userBody.add("name", "King");
+        userBody.add("age", "20");
+        HttpEntity<Object> httpEntity = new HttpEntity<>(userBody, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Object> result = restTemplate.postForEntity(uri, httpEntity, Object.class);
+
+        return result;
     }
 }
