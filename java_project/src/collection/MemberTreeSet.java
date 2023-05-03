@@ -1,33 +1,33 @@
 package collection;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.TreeSet;
 
-public class MemberArrayList {
+public class MemberTreeSet {
 
-    private ArrayList<Member> arrayList;
+    private TreeSet<TreeMember> treeSet;
 
-    public MemberArrayList() {
-        arrayList = new ArrayList<>();
+    public MemberTreeSet() {
+        treeSet = new TreeSet<>();
     }
 
-    // 초기에 사이즈 지정도 가능
-    public MemberArrayList(int size) {
-        arrayList = new ArrayList<>(size);
-    }
+    // comparable을 구현한 경우엔 필요 없지만 comparator를 구현한 경우에는 어떤 것을 구현했는지 명시해주어야 한다.
+/*    public MemberTreeSet() {
+        treeSet = new TreeSet<TreeMemberComparator>(new TreeMemberComparator());
+    }*/
 
-    public void addMember(Member member) {
-        arrayList.add(member);
+    public void addMember(TreeMember member) {
+        treeSet.add(member);
     }
 
     public boolean removeMember(int memberId) {
     /*
-        for(int i=0; i<arrayList.size(); i++) {
-            Member member = arrayList.get(i);
+        for(int i=0; i<HashSet.size(); i++) {
+            Member member = HashSet.get(i);
 
             int tempId = member.getMemberId();
             if(tempId == memberId) {
-                arrayList.remove(i);
+                HashSet.remove(i);
                 return true;
             }
         }
@@ -35,15 +35,15 @@ public class MemberArrayList {
 
         // iterator 사용해서
         // Set과 같이 get이 구현되지 않은 collection에서 많이 사용용
-       Iterator<Member> ir = arrayList.iterator();
+       Iterator<TreeMember> ir = treeSet.iterator();
 
         while(ir.hasNext()) {
             // 요소를 반환하고, 포인터는 next로 이동
-            Member member = ir.next();
+            TreeMember member = ir.next();
 
             int tempId = member.getMemberId();
             if(tempId == memberId) {
-                arrayList.remove(member);
+                treeSet.remove(member);
                 return true;
             }
         }
@@ -54,7 +54,7 @@ public class MemberArrayList {
     }
 
     public void showAllMember() {
-        for (Member member : arrayList) {
+        for (TreeMember member : treeSet) {
             System.out.println(member);
         }
         System.out.println();
