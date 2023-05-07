@@ -2,8 +2,7 @@ package stream;
 
 import java.util.Arrays;
 import java.util.function.BinaryOperator;
-
-// ReduceTest와 같은 방법
+// BinaryOperator를 구현하는 방법
 class CompareString implements BinaryOperator<String>{
 
     @Override
@@ -18,10 +17,9 @@ public class ReduceTest2 {
 
         String greetings[] = {"안녕하세요~~~", "hello", "Good morning", "반값습니다^^"};
 
-        System.out.println(Arrays.stream(greetings).reduce("", (s1, s2) ->
-
-                {if ( s1.getBytes().length >= s2.getBytes().length ) return s1;
-                else return s2;}
-                ));
+        String str = Arrays.stream(greetings).reduce(new CompareString()).get();
+        System.out.println(str);
     }
 }
+
+

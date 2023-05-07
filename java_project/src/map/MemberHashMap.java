@@ -5,14 +5,14 @@ import java.util.Iterator;
 
 public class MemberHashMap {
 
-    private HashMap<Integer, SetMember> hashMap;
+    private HashMap<Integer, MapMember> hashMap;
 
     public MemberHashMap() {
         hashMap = new HashMap<>();
     }
 
-    public void addMember(SetMember setMember) {
-        hashMap.put(setMember.getMemberId(), setMember);
+    public void addMember(MapMember mapMember) {
+        hashMap.put(mapMember.getMemberId(), mapMember);
     }
 
     public boolean removeMember(int memberId) {
@@ -28,8 +28,8 @@ public class MemberHashMap {
 
         while(ir.hasNext()) {
             int key = ir.next();
-            SetMember setMember = hashMap.get(key);
-            System.out.println(setMember);
+            MapMember mapMember = hashMap.get(key);
+            System.out.println(mapMember);
         }
     }
 }

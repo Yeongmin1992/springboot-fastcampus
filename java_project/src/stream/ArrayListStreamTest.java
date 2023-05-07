@@ -20,6 +20,7 @@ public class ArrayListStreamTest {
 
         System.out.println();
 
+        // 객체가 가지고 있는 get / set 등의 메소드를 사용하고 싶을 때는 map을 사용하면 됨
         sList.stream().map(s -> s.length()).forEach(n -> System.out.print(n + "\t"));
 
         System.out.println();

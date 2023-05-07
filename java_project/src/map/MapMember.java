@@ -1,11 +1,11 @@
 package map;
 
-public class SetMember {
+public class MapMember {
 
     private int memberId;
     private String memberName;
 
-    public SetMember(int memberId, String memberName) {
+    public MapMember(int memberId, String memberName) {
         this.memberId = memberId;
         this.memberName = memberName;
     }
@@ -28,8 +28,8 @@ public class SetMember {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof SetMember) {
-            SetMember member = (SetMember) obj;
+        if(obj instanceof MapMember) {
+            MapMember member = (MapMember) obj;
             if(this.memberId == member.getMemberId()) {
                 return true;
             }
